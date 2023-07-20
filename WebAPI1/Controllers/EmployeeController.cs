@@ -24,41 +24,55 @@ namespace WebAPI1.Controllers
 
         public IEnumerable<Employee> Get()
         {
-            using (DotNetAppSqlDb_dbEntities entities = new DotNetAppSqlDb_dbEntities())
+            using (WebAPI1_dbEntities entities = new WebAPI1_dbEntities())
             {
+    
                 return entities.Employees.ToList();
             }
         }
 
         public Employee Get(int id)
         {
-            using (DotNetAppSqlDb_dbEntities entities = new DotNetAppSqlDb_dbEntities())
+            using (WebAPI1_dbEntities entities = new WebAPI1_dbEntities())
             {
-                return entities.Employees.FirstOrDefault(e => e.EmployeeId == id);
+                return entities.Employees.FirstOrDefault(e => e.EmployeeID == id);
             }
         }
         // POST: api/Employee
-        public void Post([FromBody]string value)
+        public void Post(int id, Employee e)
         {
-
+            using (WebAPI1_dbEntities entities = new WebAPI1_dbEntities())
+            {
+                Employee emp = entities.Employees.Find(id);
+                emp.EmployeeID = e.EmployeeID;
+                emp.FirstName = e.FirstName;
+                emp.Adress = e.Adress;
+                emp.LastName = e.LastName;
+                emp.Phone = e.Phone;
+                entities.SaveChanges();
+            }
         }
 
         // PUT: api/Employee/5
-        public void Put(int id, [FromBody]string value)
+        public void Put(Employee e)
         {
-           // using (DotNetAppSqlDb_dbEntities entities = new DotNetAppSqlDb_dbEntities())
-           // {
-           //     Employee emp = new Employee();
-           //     emp.EmployeeId = id;
-           //     entities.Employees.Add(emp);
-           //     entities.SaveChanges();
-          //  }
+            using (WebAPI1_dbEntities entities = new WebAPI1_dbEntities())
+            {
+                Employee emp = new Employee();
+                emp.EmployeeID = e.EmployeeID;
+                emp.FirstName = e.FirstName;
+                emp.Adress = e.Adress;
+                emp.LastName = e.LastName;
+                emp.Phone = e.Phone;
+                entities.Employees.Add(emp);
+                entities.SaveChanges();
+            }
         }
 
         // DELETE: api/Employee/5
         public void Delete(int id)
         {
-            using (DotNetAppSqlDb_dbEntities entities = new DotNetAppSqlDb_dbEntities())
+            using (WebAPI1_dbEntities entities = new WebAPI1_dbEntities())
             {
                 Employee emp = entities.Employees.Find(id);
                 entities.Employees.Remove(emp);
